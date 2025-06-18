@@ -71,7 +71,7 @@ public:
 		PrintBitboard(BB.PieceBitBoard, std::string("PieceBitBoard"));
 
 		//Pawns
-		
+
 		//Single move (1 sq)
 		for (unsigned int i = 0; i < AlivePawns.size(); i++) {
 			U64 future_move = BitMap_Change_Vert(PBitBoard, AlivePawns[i], 8, Color);
@@ -126,8 +126,32 @@ public:
 			}
 		}
 		legal_moves_test(LegalMoves);
+
+		U64 test_1 = shift_n(BB.WhitePiecesBitBoard, 12, 9);
+		PrintBitboard(test_1, "test1");
+
+		U64 test_2 = shift_s(BB.BlackPiecesBitBoard, 52, 2);
+		PrintBitboard(test_2, "test2");
+
+		U64 test_3 = shift_e(BB.WhiteKnightBitBoard, 1, 2);
+		PrintBitboard(test_3, "test3");
+
+		U64 test_4 = shift_w(BB.WhiteKnightBitBoard, 1, 1);
+		PrintBitboard(test_4, "test4");
+
+		U64 test_5 = shift_ne(BB.WhitePiecesBitBoard, 12, 3);
+		PrintBitboard(test_5, "test5");
+
+		U64 test_6 = shift_nw(BB.WhitePiecesBitBoard, 12, 3);
+		PrintBitboard(test_6, "test6");
+
+		U64 test_7 = shift_se(BB.BlackPiecesBitBoard, 52, 3);
+		PrintBitboard(test_7, "test7");
+
+		U64 test_8 = shift_sw(BB.BlackPiecesBitBoard, 52, 3);
+		PrintBitboard(test_8, "test8");
 	}
-	
+
 	void PieceLogic(int Color) {
 		BitBoards bitboard;
 		U64 WhiteKnightBitBoard = bitboard.WhiteKnightBitBoard;
@@ -142,8 +166,8 @@ public:
 		}
 
 		for (unsigned int i = 0; i < AliveKnights.size(); i++) {
-			U64 future_move[8] = {0};
-			future_move[0] <<= 
+			U64 future_move[8] = { 0 };
+			//future_move[0] <<= 
 
 		}
 	}
@@ -177,6 +201,7 @@ private:
 		}
 		std::cout << "\n";
 	}
+
 	void PrintBitboard(U64 BitBoard, std::string Name) {
 		std::bitset<64> bits(BitBoard);  // Create bitset from BitBoard
 
@@ -199,7 +224,7 @@ private:
 		std::cout << "Amount of legal moves available:" << LegalMoves.size() << "\n";
 		int n = LegalMoves.size();
 		for (int i = 0; i < n; i++) {
-			PrintBetterBitboard(LegalMoves[i],bitboard.WhitePiecesBitBoard, bitboard.BlackPiecesBitBoard, "Legal move nr" + std::to_string(i+1));
+			PrintBetterBitboard(LegalMoves[i], bitboard.WhitePiecesBitBoard, bitboard.BlackPiecesBitBoard, "Legal move nr" + std::to_string(i + 1));
 		}
 	}
 
@@ -232,7 +257,7 @@ private:
 
 	int RecognizeFile(std::string SquareAdress) {
 		char file = SquareAdress[0];
-		char rank = (SquareAdress[1]);
+		char rank = SquareAdress[1];
 
 		std::map<char, int> AdressToNumber = {
 			{'a', 1}, {'b', 2}, {'c', 3}, {'d', 4},
@@ -246,11 +271,11 @@ private:
 
 		int int_file = AdressToNumber[file];
 		int int_rank = rank - '0'; //ASCII maagia
-		int BitNumber = (int_rank-1)*8 + (int_file-1); //Arvutame Biti numbri bitboardil. numbrid on 0-63
+		int BitNumber = (int_rank - 1) * 8 + (int_file - 1); //Arvutame Biti numbri bitboardil. numbrid on 0-63
 		std::cout << BitNumber << "\n";
-		return BitNumber; 
+		return BitNumber;
 	}
-	
+
 	//Brian Kernighan's way BigCounting
 	U8 countSetBits(U64 n) {
 		U8 count = 0;
@@ -281,7 +306,7 @@ private:
 			TempBitMap_2 = TempBitMap_1 >> BitShiftAmount;
 		}
 		TempBitMap_2 = TempBitMap_1 | TempBitMap_2;
-		U64 result = BitMap^ TempBitMap_2;
+		U64 result = BitMap ^ TempBitMap_2;
 		//PrintBitboard(result, "Result");
 		return result;
 	}
@@ -294,8 +319,8 @@ private:
 		if (Piece == 1) {
 			//Special logic for outer files
 			if (OuterFileCheck(BitNumber) && BitNumber % 2 == 0) {
-				if (Dir == 0){
-					TempBitMap_1 = TempBitMap_1 << 9; 
+				if (Dir == 0) {
+					TempBitMap_1 = TempBitMap_1 << 9;
 				}
 				else if (Dir == 1) {
 					TempBitMap_1 = TempBitMap_1 >> 7;
@@ -306,10 +331,10 @@ private:
 			//Special logic for outer files
 			else if (OuterFileCheck(BitNumber) && BitNumber % 2 == 1) {
 				if (Dir == 0) {
-					TempBitMap_1 = TempBitMap_1 << 7; 
+					TempBitMap_1 = TempBitMap_1 << 7;
 				}
 				else if (Dir == 1) {
-					TempBitMap_1 = TempBitMap_1 >> 9; 
+					TempBitMap_1 = TempBitMap_1 >> 9;
 				}
 				TempBitMap_1 = TempBitMap_1 & BitMap;
 				return TempBitMap_1;
@@ -323,7 +348,7 @@ private:
 					TempBitMap_1 = TempBitMap_1 >> 7;
 					TempBitMap_2 = TempBitMap_1 >> 2;
 				}
-				
+
 
 				TempBitMap_2 = TempBitMap_1 | TempBitMap_2;
 				TempBitMap_1 = TempBitMap_1 & BitMap;
@@ -335,10 +360,11 @@ private:
 
 		}
 		else {
-			std::cout << "\n\n" << "SOMETHING::HAS::GONE::WRON::LEGAL::MOVE::CAPTURE::ERROR" << "\n\n";
+			std::cout << "\n\n" << "SOMETHING::HAS::GONE::WRONG::LEGAL::MOVE::CAPTURE::ERROR" << "\n\n";
 			return 0;
 		}
 	}
+
 	bool IsColliding(U64 BitMapCollision, int BitNumber, int BitShiftAmount, int Dir) {
 		U64 TempBitMap_1 = CreateTempBit(BitNumber);
 		if (Dir == 0) {
@@ -348,9 +374,10 @@ private:
 			TempBitMap_1 = TempBitMap_1 >> BitShiftAmount; // after bitshift = movedpos
 		}
 		TempBitMap_1 = TempBitMap_1 & BitMapCollision;
-		
+
 		return !TempBitMap_1 == 0;
 	}
+
 	// int Piece 1 = pawn, 3 = bishop, 5 = rook, 9 = queen
 	bool IsBlocked(U64 BitMap, int Piece, int BitNumber, int BitShiftAmount, int Color) {
 		U64 TempBitMap_1 = CreateTempBit(BitNumber);
@@ -375,11 +402,191 @@ private:
 		}
 		else return false;
 	}
-};	
+
+
+	void give_filerank(int BitNumber, unsigned int& file, unsigned int& rank) {
+		// integer division nii et 7/8 for example annab endiselt 0
+		file = (BitNumber % 8) + 1;
+		rank = (BitNumber / 8) + 1;
+	}
+
+	//Bitshift directions
+	U64 shift_n(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares * 8;
+		unsigned int file;
+		unsigned int rank;
+		
+		//Check for out of bounds movement
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = 8 - rank;
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+		else {
+			bitmap ^= temp_map;
+			temp_map <<= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+
+	U64 shift_s(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares * 8;
+		unsigned int file;
+		unsigned int rank;
+		PrintBitboard(bitmap, "shift_s bitmap");
+		//Check for out of bounds movement
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = rank - 1;
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+		else {
+			bitmap ^= temp_map;
+			temp_map >>= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+
+	U64 shift_e(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares;
+		unsigned int file;
+		unsigned int rank;
+
+		//Check for out of bounds movement
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = 8-file;
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+		else {
+			bitmap ^= temp_map;
+			temp_map <<= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+
+	U64 shift_w(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares;
+		unsigned int file;
+		unsigned int rank;
+
+		//Check for out of bounds movement
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = file - 1;
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+		else {
+			bitmap ^= temp_map;
+			temp_map >>= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+
+	U64 shift_ne(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares * 9;
+		unsigned int file;
+		unsigned int rank;
+
+		// Out-of-bounds check
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = std::min(8 - rank, 8 - file);
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+
+		else {
+			bitmap ^= temp_map;
+			temp_map <<= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+	U64 shift_nw(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares * 7;
+		unsigned int file;
+		unsigned int rank;
+
+		// Out-of-bounds check
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = std::min(8 - rank, file -1);
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+
+		else {
+			bitmap ^= temp_map;
+			temp_map <<= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+
+	U64 shift_se(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares * 7;
+		unsigned int file;
+		unsigned int rank;
+
+		// Out-of-bounds check
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = std::min(rank - 1, 8 - file);
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+
+		else {
+			bitmap ^= temp_map;
+			temp_map >>= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+
+	U64 shift_sw(U64 bitmap, int bitnumber, int num_squares) {
+		U64 temp_map = CreateTempBit(bitnumber);
+		int bitshift_amount = num_squares * 9;
+		unsigned int file;
+		unsigned int rank;
+
+		// Out-of-bounds check
+		give_filerank(bitnumber, file, rank);
+		int max_num_squares_amount = std::min(rank - 1, file - 1);
+		if (max_num_squares_amount < num_squares) {
+			bitmap = 0;
+			return bitmap;
+		}
+
+		else {
+			bitmap ^= temp_map;
+			temp_map >>= bitshift_amount;
+			bitmap |= temp_map;
+			return bitmap;
+		}
+	}
+};
 
 int main() {
 	BitBoards BB;
 	makeMove game;
 	game.PawnLogic(0);
+
 	return 0;
 }
